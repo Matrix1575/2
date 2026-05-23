@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Koha e Namazit</title>
+
+<style>
+
+body{
+margin:0;
+padding:0;
+background:#0b1220;
+font-family:Arial,sans-serif;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+overflow:hidden;
+}
+
+.container{
+width:90%;
+text-align:center;
+}
+
+.clock{
+font-size:120px;
+font-weight:bold;
+margin-bottom:20px;
+}
+
+.date{
+font-size:40px;
+margin-bottom:40px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+font-size:38px;
+}
+
+th,td{
+padding:20px;
+border:2px solid rgba(255,255,255,0.15);
+}
+
+th{
+background:#1e293b;
+}
+
+tr:nth-child(even){
+background:rgba(255,255,255,0.05);
+}
+
+.next{
+background:#16a34a !important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="clock" id="clock">
+00:00:00
+</div>
+
+<div class="date" id="date"></div>
+
+<table>
+
+<tr>
+<th>Namazi</th>
+<th>Ora</th>
+</tr>
+
+<tr>
+<td>Sabahu</td>
+<td>04:35</td>
+</tr>
+
+<tr>
+<td>Dreka</td>
+<td>12:00</td>
+</tr>
+
+<tr class="next">
+<td>Ikindia</td>
+<td>16:45</td>
+</tr>
+
+<tr>
+<td>Akshami</td>
+<td>20:15</td>
+</tr>
+
+<tr>
+<td>Jacia</td>
+<td>21:45</td>
+</tr>
+
+</table>
+
+</div>
+
+<script>
+
+function updateClock(){
+
+const now = new Date();
+
+document.getElementById("clock").innerHTML =
+now.toLocaleTimeString('sq-AL');
+
+document.getElementById("date").innerHTML =
+now.toLocaleDateString('sq-AL',{
+weekday:'long',
+year:'numeric',
+month:'long',
+day:'numeric'
+});
+
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+</script>
+
+</body>
+</html>
