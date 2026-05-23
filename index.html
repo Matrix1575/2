@@ -1,240 +1,344 @@
 <!DOCTYPE html>
-<html>
+<html lang="sq">
 <head>
 <meta charset="UTF-8">
-<title>Vaktia e Namazit TV</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vaktia e Namazit - Xhamia Topanicë 1</title>
 <style>
+*{box-sizing:border-box}
 html,body{
   margin:0;
-  padding:0;
-  background:#06111f;
-  color:white;
-  font-family:Arial,sans-serif;
   width:100%;
   height:100%;
   overflow:hidden;
+  font-family:Arial,Helvetica,sans-serif;
+  color:white;
+  background:
+    radial-gradient(circle at 18% 0%,rgba(96,166,205,.35),transparent 32%),
+    linear-gradient(135deg,#4b7fa2 0%,#2c5a79 42%,#17324c 100%);
 }
-#wrap{
-  padding:35px;
+.screen{
+  width:100vw;
+  height:100vh;
+  padding:16px 28px 20px;
+  display:grid;
+  grid-template-rows:145px 1fr 44px;
+  gap:28px;
 }
-h1{
-  font-size:62px;
-  margin:0;
+.header{
+  background:rgba(8,27,48,.72);
+  border-radius:7px;
+  box-shadow:0 10px 24px rgba(0,0,0,.22);
+  display:grid;
+  grid-template-columns:1fr 1fr 165px;
+  align-items:center;
+  padding:18px 26px;
 }
-#place{
-  font-size:30px;
-  color:#c7d8e8;
-  margin-top:10px;
+.title{
+  color:#6ed8b6;
+}
+.title-main{
+  font-size:36px;
+  line-height:1.12;
+  font-weight:400;
+}
+.title-sub{
+  margin-top:8px;
+  font-size:23px;
+  color:#71d4b7;
+}
+.timeTop{
+  text-align:center;
 }
 #clock{
-  font-size:105px;
-  font-family:monospace;
-  font-weight:bold;
-  text-align:center;
-  margin:35px 0 10px 0;
+  font-size:78px;
+  font-weight:300;
+  line-height:.95;
+  letter-spacing:1px;
 }
 #date{
-  font-size:30px;
-  text-align:center;
-  color:#c7d8e8;
+  margin-top:13px;
+  font-size:22px;
+  color:#69d7b8;
 }
-#next{
-  margin:35px 0;
-  background:#087d4b;
-  border-radius:25px;
-  padding:25px;
-  text-align:center;
-  font-size:45px;
+.logo{
+  justify-self:end;
+  width:115px;
+  height:115px;
+  border-radius:50%;
+  background:#f5f7f7;
+  color:#08704f;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border:2px solid rgba(255,255,255,.85);
+  box-shadow:0 6px 18px rgba(0,0,0,.25);
   font-weight:bold;
+  line-height:1.08;
+  font-size:18px;
 }
-#count{
-  font-family:monospace;
-  color:#98ffca;
-  font-size:52px;
-  margin-top:12px;
+.logo small{
+  font-size:15px;
 }
-.grid{
-  display:table;
-  width:100%;
-  table-layout:fixed;
-  border-spacing:12px;
-}
-.row{
-  display:table-row;
+.cards{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:22px;
+  min-height:0;
 }
 .card{
-  display:table-cell;
-  background:#13263d;
-  border-radius:20px;
-  padding:25px 8px;
-  text-align:center;
+  position:relative;
+  background:rgba(9,29,50,.72);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:7px;
+  box-shadow:inset 0 0 38px rgba(255,255,255,.025),0 10px 22px rgba(0,0,0,.18);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding-top:72px;
 }
 .card.active{
-  background:#0b8f56;
+  background:
+    radial-gradient(circle at 52% 30%,rgba(255,255,255,.23),transparent 17%),
+    linear-gradient(180deg,#a9bbc4 0%,#c0c0bd 45%,#e6ba92 100%);
+  border-color:rgba(255,255,255,.58);
 }
-.n{
-  font-size:26px;
-  color:#dcecff;
+.card.active .name,
+.card.active .time,
+.card.active .icon,
+.card.active .subTimes,
+.card.active .fixedTime{
+  color:white;
 }
-.t{
-  font-size:43px;
-  font-family:monospace;
-  font-weight:bold;
-  margin-top:12px;
-}
-#status{
+.countdown{
   position:absolute;
-  bottom:12px;
-  left:30px;
-  color:#8fb1cc;
-  font-size:18px;
+  top:54px;
+  left:24px;
+  right:24px;
+  background:rgba(25,44,62,.78);
+  border-radius:5px;
+  height:56px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:"Courier New",monospace;
+  font-size:32px;
+  letter-spacing:1px;
+  z-index:3;
+}
+.inner{
+  height:275px;
+  display:grid;
+  grid-template-rows:76px 48px 78px 42px;
+  align-items:center;
+  justify-items:center;
+  transform:translateY(10px);
+}
+.icon{
+  font-size:56px;
+  height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.icon-img{
+  font-size:62px;
+  filter:drop-shadow(0 2px 0 rgba(0,0,0,.45));
+}
+.name{
+  font-size:34px;
+  font-weight:400;
+  line-height:1;
+}
+.time{
+  font-size:64px;
+  font-weight:300;
+  line-height:1;
+  letter-spacing:1px;
+}
+.subTimes{
+  font-size:30px;
+  line-height:1;
+  display:flex;
+  gap:24px;
+  align-items:center;
+  justify-content:center;
+}
+.fixedTime{
+  font-size:30px;
+  line-height:1;
+}
+.footer{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  align-items:center;
+  color:white;
+  font-size:20px;
+  padding:0 4px;
+}
+.footer .center{
+  text-align:center;
+  color:#68d5b2;
+  font-weight:bold;
+}
+.footer .right{
+  text-align:right;
+  font-size:28px;
+}
+@media(max-width:900px){
+  body{overflow:auto}
+  .screen{height:auto;min-height:100vh;grid-template-rows:auto auto auto;padding:14px;gap:16px}
+  .header{grid-template-columns:1fr;text-align:center;gap:14px}
+  .logo{justify-self:center}
+  .cards{grid-template-columns:1fr}
+  .card{height:450px}
+  #clock{font-size:58px}
 }
 </style>
 </head>
 <body>
-<div id="wrap">
-  <h1>Vaktia e Namazit</h1>
-  <div id="place">Gjilan / Kamenicë · Kosovë</div>
-  <div id="clock">--:--:--</div>
-  <div id="date">--</div>
-  <div id="next">Namazi tjetër: --<div id="count">--:--:--</div></div>
+<div class="screen">
+  <div class="header">
+    <div class="title">
+      <div class="title-main">Xhamia e fshatit<br>Topanicë 1</div>
+      <div class="title-sub">Topanicë · Kamenicë</div>
+    </div>
+    <div class="timeTop">
+      <div id="clock">--:--</div>
+      <div id="date">--</div>
+    </div>
+    <div class="logo">
+      BIK<br><small>Takvimi</small><small>2026</small>
+    </div>
+  </div>
 
-  <div class="grid">
-    <div class="row" id="cards"></div>
+  <div class="cards" id="cards"></div>
+
+  <div class="footer">
+    <div>⌂&nbsp; General</div>
+    <div class="center">MyMosq</div>
+    <div class="right">⚙</div>
   </div>
 </div>
-<div id="status">TV version i thjeshtuar</div>
 
 <script>
-var names = ["Imsak","Sabah","Lindja","Dreka","Ikindia","Akshami","Jacia"];
-
-/* Koha llogaritet automatike për Gjilan/Kamenicë.
-   Përputhje 100% me BIK kërkon tabelën zyrtare ditore. */
-var lat = 42.4635;
-var lng = 21.4693;
-var cityOffset = -1;
-
-function pad(n){ return (n<10 ? "0" : "") + n; }
-function degToRad(d){ return d*Math.PI/180; }
-function radToDeg(r){ return r*180/Math.PI; }
-function fixAngle(a){ return ((a%360)+360)%360; }
-function fixHour(h){ return ((h%24)+24)%24; }
-
-function julian(y,m,d){
-  if(m<=2){ y--; m+=12; }
-  var A=Math.floor(y/100);
-  var B=2-A+Math.floor(A/4);
-  return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5;
-}
-
-function sunpos(jd){
-  var D=jd-2451545.0;
-  var g=fixAngle(357.529+0.98560028*D);
-  var q=fixAngle(280.459+0.98564736*D);
-  var L=fixAngle(q+1.915*Math.sin(degToRad(g))+0.020*Math.sin(degToRad(2*g)));
-  var e=23.439-0.00000036*D;
-  var RA=fixAngle(radToDeg(Math.atan2(Math.cos(degToRad(e))*Math.sin(degToRad(L)),Math.cos(degToRad(L)))))/15;
-  var decl=radToDeg(Math.asin(Math.sin(degToRad(e))*Math.sin(degToRad(L))));
-  var eqt=q/15-RA;
-  return {decl:decl, eqt:eqt};
-}
-
-function midday(t,jd){
-  var s=sunpos(jd+t);
-  return fixHour(12-s.eqt);
-}
-
-function angleTime(angle,time,dir,jd){
-  var s=sunpos(jd+time);
-  var noon=midday(time,jd);
-  var x=(-Math.sin(degToRad(angle))-Math.sin(degToRad(s.decl))*Math.sin(degToRad(lat)))/
-        (Math.cos(degToRad(s.decl))*Math.cos(degToRad(lat)));
-  if(x<-1)x=-1;
-  if(x>1)x=1;
-  var t=radToDeg(Math.acos(x))/15;
-  return noon+(dir=="ccw"?-t:t);
-}
-
-function asrTime(factor,time,jd){
-  var s=sunpos(jd+time);
-  var angle=-radToDeg(Math.atan(1/(factor+Math.tan(Math.abs(degToRad(lat-s.decl))))));
-  return angleTime(angle,time,"cw",jd);
-}
-
-function hToMin(h){
-  h=fixHour(h);
-  return Math.round(h*60);
-}
-
-function minToTime(m){
-  m=((Math.round(m)%1440)+1440)%1440;
-  return pad(Math.floor(m/60))+":"+pad(m%60);
-}
-
-function calc(d){
-  var tz = -d.getTimezoneOffset()/60;
-  var jd = julian(d.getFullYear(), d.getMonth()+1, d.getDate()) - lng/(15*24);
-  var off = tz - lng/15;
-  var raw = {};
-  raw["Imsak"] = angleTime(19.5,0.20,"ccw",jd);
-  raw["Sabah"] = angleTime(18,0.20,"ccw",jd);
-  raw["Lindja"] = angleTime(0.833,0.25,"ccw",jd);
-  raw["Dreka"] = midday(0.5,jd);
-  raw["Ikindia"] = asrTime(1,0.60,jd);
-  raw["Akshami"] = angleTime(0.833,0.75,"cw",jd);
-  raw["Jacia"] = angleTime(17,0.80,"cw",jd);
-
-  var out = {};
-  for(var i=0;i<names.length;i++){
-    var n=names[i];
-    out[n]=minToTime(hToMin(raw[n]+off)+cityOffset);
+/*
+  Kohët janë vendosur sipas shembullit të fotos.
+  Pastaj mund t'i zëvendësosh me tabelën zyrtare BIK 2026 brenda objektit TAKVIMI.
+*/
+var TAKVIMI={
+  "2026-05-23":{
+    imsaku:"02:56",
+    sabahu:"03:16",
+    lindja:"04:58",
+    dreka:"12:35",
+    ikindia:"16:36",
+    akshami:"20:06",
+    jacia:"22:02"
   }
-  return out;
-}
+};
 
-function toMin(t){
-  var p=t.split(":");
-  return parseInt(p[0],10)*60+parseInt(p[1],10);
-}
+var DEFAULT_TIMES={
+  imsaku:"02:56",
+  sabahu:"03:16",
+  lindja:"04:58",
+  dreka:"12:35",
+  ikindia:"16:36",
+  akshami:"20:06",
+  jacia:"22:02"
+};
 
+var ORDER=["Imsaku","Dreka","Ikindia","Akshami","Jacia"];
+
+function pad(n){return (n<10?"0":"")+n}
+function keyDate(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+function toMin(t){var p=t.split(":");return parseInt(p[0],10)*60+parseInt(p[1],10)}
+function getTimes(d){
+  var r=TAKVIMI[keyDate(d)] || DEFAULT_TIMES;
+  return {
+    Imsaku:r.imsaku,
+    Sabahu:r.sabahu,
+    Lindja:r.lindja,
+    Dreka:r.dreka,
+    Ikindia:r.ikindia,
+    Akshami:r.akshami,
+    Jacia:r.jacia
+  };
+}
+function nextPrayer(times,now){
+  var cur=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
+  var next="Imsaku",remain=0;
+  for(var i=0;i<ORDER.length;i++){
+    var m=toMin(times[ORDER[i]]);
+    if(m>cur){next=ORDER[i];remain=m-cur;break}
+  }
+  if(remain===0){remain=toMin(times.Imsaku)+1440-cur}
+  return {name:next,remain:remain};
+}
+function formatRemain(mins){
+  var sec=Math.max(0,Math.floor(mins*60));
+  var h=Math.floor(sec/3600);
+  var m=Math.floor((sec%3600)/60);
+  var s=sec%60;
+  return pad(h)+":"+pad(m)+":"+pad(s);
+}
+function isSummerTime(d){
+  var jan=new Date(d.getFullYear(),0,1).getTimezoneOffset();
+  return d.getTimezoneOffset()<jan;
+}
+function iconFor(n){
+  if(n==="Imsaku") return "◓";
+  if(n==="Dreka") return "☀";
+  if(n==="Ikindia") return "🌅";
+  if(n==="Akshami") return "◒";
+  if(n==="Jacia") return "☾";
+  return "";
+}
+function timeFor(times,n){
+  if(n==="Imsaku") return times.Imsaku;
+  if(n==="Dreka") return times.Dreka;
+  if(n==="Ikindia") return times.Ikindia;
+  if(n==="Akshami") return times.Akshami;
+  if(n==="Jacia") return times.Jacia;
+}
 function update(){
   var now=new Date();
-  document.getElementById("clock").innerHTML=pad(now.getHours())+":"+pad(now.getMinutes())+":"+pad(now.getSeconds());
-  document.getElementById("date").innerHTML=pad(now.getDate())+"."+(pad(now.getMonth()+1))+"."+now.getFullYear();
+  var hh=pad(now.getHours()),mm=pad(now.getMinutes());
+  document.getElementById("clock").innerHTML=hh+":"+mm;
+  document.getElementById("date").innerHTML=pad(now.getDate())+"."+pad(now.getMonth()+1)+"."+now.getFullYear()+" / 6 Dhul Hixhxhe 1447";
 
-  var times=calc(now);
-  var cur=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
-  var next="Sabah";
-  var remain=0;
-
-  for(var i=0;i<names.length;i++){
-    var m=toMin(times[names[i]]);
-    if(m>cur){
-      next=names[i];
-      remain=m-cur;
-      break;
-    }
-  }
-  if(remain===0){
-    remain=toMin(times["Sabah"])+1440-cur;
-  }
-
-  var sec=Math.floor(remain*60);
-  var hh=Math.floor(sec/3600);
-  var mm=Math.floor((sec%3600)/60);
-  var ss=sec%60;
-
-  document.getElementById("next").innerHTML="Namazi tjetër: "+next+" "+times[next]+'<div id="count">'+pad(hh)+":"+pad(mm)+":"+pad(ss)+"</div>";
-
+  var times=getTimes(now);
+  var np=nextPrayer(times,now);
   var html="";
-  for(var j=0;j<names.length;j++){
-    var name=names[j];
-    var cls = name==next ? "card active" : "card";
-    html += '<div class="'+cls+'"><div class="n">'+name+'</div><div class="t">'+times[name]+'</div></div>';
+
+  for(var i=0;i<ORDER.length;i++){
+    var n=ORDER[i];
+    var active=(n===np.name);
+    html+='<div class="card '+(active?'active':'')+'">';
+    if(active && n!=="Dreka"){
+      html+='<div class="countdown">'+formatRemain(np.remain)+'</div>';
+    }
+    html+='<div class="inner">';
+    html+='<div class="icon '+(n==="Ikindia"?'icon-img':'')+'">'+iconFor(n)+'</div>';
+    html+='<div class="name">'+n+'</div>';
+    html+='<div class="time">'+timeFor(times,n)+'</div>';
+
+    if(n==="Imsaku"){
+      html+='<div class="subTimes"><span>'+times.Sabahu+'</span><span>'+times.Lindja+'</span></div>';
+    } else if(n==="Dreka"){
+      html+='<div class="fixedTime">'+(isSummerTime(now)?"13:00":"12:00")+'</div>';
+    } else {
+      html+='<div class="subTimes"></div>';
+    }
+
+    html+='</div></div>';
   }
+
   document.getElementById("cards").innerHTML=html;
 }
-
 update();
 setInterval(update,1000);
 </script>
