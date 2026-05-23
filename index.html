@@ -1,139 +1,242 @@
 <!DOCTYPE html>
-<html lang="sq">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Koha e Namazit</title>
-
+<title>Vaktia e Namazit TV</title>
 <style>
-
-body{
-margin:0;
-padding:0;
-background:#0b1220;
-font-family:Arial,sans-serif;
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-overflow:hidden;
+html,body{
+  margin:0;
+  padding:0;
+  background:#06111f;
+  color:white;
+  font-family:Arial,sans-serif;
+  width:100%;
+  height:100%;
+  overflow:hidden;
 }
-
-.container{
-width:90%;
-text-align:center;
+#wrap{
+  padding:35px;
 }
-
-.clock{
-font-size:120px;
-font-weight:bold;
-margin-bottom:20px;
+h1{
+  font-size:62px;
+  margin:0;
 }
-
-.date{
-font-size:40px;
-margin-bottom:40px;
+#place{
+  font-size:30px;
+  color:#c7d8e8;
+  margin-top:10px;
 }
-
-table{
-width:100%;
-border-collapse:collapse;
-font-size:38px;
+#clock{
+  font-size:105px;
+  font-family:monospace;
+  font-weight:bold;
+  text-align:center;
+  margin:35px 0 10px 0;
 }
-
-th,td{
-padding:20px;
-border:2px solid rgba(255,255,255,0.15);
+#date{
+  font-size:30px;
+  text-align:center;
+  color:#c7d8e8;
 }
-
-th{
-background:#1e293b;
+#next{
+  margin:35px 0;
+  background:#087d4b;
+  border-radius:25px;
+  padding:25px;
+  text-align:center;
+  font-size:45px;
+  font-weight:bold;
 }
-
-tr:nth-child(even){
-background:rgba(255,255,255,0.05);
+#count{
+  font-family:monospace;
+  color:#98ffca;
+  font-size:52px;
+  margin-top:12px;
 }
-
-.next{
-background:#16a34a !important;
+.grid{
+  display:table;
+  width:100%;
+  table-layout:fixed;
+  border-spacing:12px;
 }
-
+.row{
+  display:table-row;
+}
+.card{
+  display:table-cell;
+  background:#13263d;
+  border-radius:20px;
+  padding:25px 8px;
+  text-align:center;
+}
+.card.active{
+  background:#0b8f56;
+}
+.n{
+  font-size:26px;
+  color:#dcecff;
+}
+.t{
+  font-size:43px;
+  font-family:monospace;
+  font-weight:bold;
+  margin-top:12px;
+}
+#status{
+  position:absolute;
+  bottom:12px;
+  left:30px;
+  color:#8fb1cc;
+  font-size:18px;
+}
 </style>
-
 </head>
-
 <body>
+<div id="wrap">
+  <h1>Vaktia e Namazit</h1>
+  <div id="place">Gjilan / Kamenicë · Kosovë</div>
+  <div id="clock">--:--:--</div>
+  <div id="date">--</div>
+  <div id="next">Namazi tjetër: --<div id="count">--:--:--</div></div>
 
-<div class="container">
-
-<div class="clock" id="clock">
-00:00:00
+  <div class="grid">
+    <div class="row" id="cards"></div>
+  </div>
 </div>
-
-<div class="date" id="date"></div>
-
-<table>
-
-<tr>
-<th>Namazi</th>
-<th>Ora</th>
-</tr>
-
-<tr>
-<td>Sabahu</td>
-<td>04:35</td>
-</tr>
-
-<tr>
-<td>Dreka</td>
-<td>12:00</td>
-</tr>
-
-<tr class="next">
-<td>Ikindia</td>
-<td>16:45</td>
-</tr>
-
-<tr>
-<td>Akshami</td>
-<td>20:15</td>
-</tr>
-
-<tr>
-<td>Jacia</td>
-<td>21:45</td>
-</tr>
-
-</table>
-
-</div>
+<div id="status">TV version i thjeshtuar</div>
 
 <script>
+var names = ["Imsak","Sabah","Lindja","Dreka","Ikindia","Akshami","Jacia"];
 
-function updateClock(){
+/* Koha llogaritet automatike për Gjilan/Kamenicë.
+   Përputhje 100% me BIK kërkon tabelën zyrtare ditore. */
+var lat = 42.4635;
+var lng = 21.4693;
+var cityOffset = -1;
 
-const now = new Date();
+function pad(n){ return (n<10 ? "0" : "") + n; }
+function degToRad(d){ return d*Math.PI/180; }
+function radToDeg(r){ return r*180/Math.PI; }
+function fixAngle(a){ return ((a%360)+360)%360; }
+function fixHour(h){ return ((h%24)+24)%24; }
 
-document.getElementById("clock").innerHTML =
-now.toLocaleTimeString('sq-AL');
-
-document.getElementById("date").innerHTML =
-now.toLocaleDateString('sq-AL',{
-weekday:'long',
-year:'numeric',
-month:'long',
-day:'numeric'
-});
-
+function julian(y,m,d){
+  if(m<=2){ y--; m+=12; }
+  var A=Math.floor(y/100);
+  var B=2-A+Math.floor(A/4);
+  return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5;
 }
 
-setInterval(updateClock,1000);
+function sunpos(jd){
+  var D=jd-2451545.0;
+  var g=fixAngle(357.529+0.98560028*D);
+  var q=fixAngle(280.459+0.98564736*D);
+  var L=fixAngle(q+1.915*Math.sin(degToRad(g))+0.020*Math.sin(degToRad(2*g)));
+  var e=23.439-0.00000036*D;
+  var RA=fixAngle(radToDeg(Math.atan2(Math.cos(degToRad(e))*Math.sin(degToRad(L)),Math.cos(degToRad(L)))))/15;
+  var decl=radToDeg(Math.asin(Math.sin(degToRad(e))*Math.sin(degToRad(L))));
+  var eqt=q/15-RA;
+  return {decl:decl, eqt:eqt};
+}
 
-updateClock();
+function midday(t,jd){
+  var s=sunpos(jd+t);
+  return fixHour(12-s.eqt);
+}
 
+function angleTime(angle,time,dir,jd){
+  var s=sunpos(jd+time);
+  var noon=midday(time,jd);
+  var x=(-Math.sin(degToRad(angle))-Math.sin(degToRad(s.decl))*Math.sin(degToRad(lat)))/
+        (Math.cos(degToRad(s.decl))*Math.cos(degToRad(lat)));
+  if(x<-1)x=-1;
+  if(x>1)x=1;
+  var t=radToDeg(Math.acos(x))/15;
+  return noon+(dir=="ccw"?-t:t);
+}
+
+function asrTime(factor,time,jd){
+  var s=sunpos(jd+time);
+  var angle=-radToDeg(Math.atan(1/(factor+Math.tan(Math.abs(degToRad(lat-s.decl))))));
+  return angleTime(angle,time,"cw",jd);
+}
+
+function hToMin(h){
+  h=fixHour(h);
+  return Math.round(h*60);
+}
+
+function minToTime(m){
+  m=((Math.round(m)%1440)+1440)%1440;
+  return pad(Math.floor(m/60))+":"+pad(m%60);
+}
+
+function calc(d){
+  var tz = -d.getTimezoneOffset()/60;
+  var jd = julian(d.getFullYear(), d.getMonth()+1, d.getDate()) - lng/(15*24);
+  var off = tz - lng/15;
+  var raw = {};
+  raw["Imsak"] = angleTime(19.5,0.20,"ccw",jd);
+  raw["Sabah"] = angleTime(18,0.20,"ccw",jd);
+  raw["Lindja"] = angleTime(0.833,0.25,"ccw",jd);
+  raw["Dreka"] = midday(0.5,jd);
+  raw["Ikindia"] = asrTime(1,0.60,jd);
+  raw["Akshami"] = angleTime(0.833,0.75,"cw",jd);
+  raw["Jacia"] = angleTime(17,0.80,"cw",jd);
+
+  var out = {};
+  for(var i=0;i<names.length;i++){
+    var n=names[i];
+    out[n]=minToTime(hToMin(raw[n]+off)+cityOffset);
+  }
+  return out;
+}
+
+function toMin(t){
+  var p=t.split(":");
+  return parseInt(p[0],10)*60+parseInt(p[1],10);
+}
+
+function update(){
+  var now=new Date();
+  document.getElementById("clock").innerHTML=pad(now.getHours())+":"+pad(now.getMinutes())+":"+pad(now.getSeconds());
+  document.getElementById("date").innerHTML=pad(now.getDate())+"."+(pad(now.getMonth()+1))+"."+now.getFullYear();
+
+  var times=calc(now);
+  var cur=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
+  var next="Sabah";
+  var remain=0;
+
+  for(var i=0;i<names.length;i++){
+    var m=toMin(times[names[i]]);
+    if(m>cur){
+      next=names[i];
+      remain=m-cur;
+      break;
+    }
+  }
+  if(remain===0){
+    remain=toMin(times["Sabah"])+1440-cur;
+  }
+
+  var sec=Math.floor(remain*60);
+  var hh=Math.floor(sec/3600);
+  var mm=Math.floor((sec%3600)/60);
+  var ss=sec%60;
+
+  document.getElementById("next").innerHTML="Namazi tjetër: "+next+" "+times[next]+'<div id="count">'+pad(hh)+":"+pad(mm)+":"+pad(ss)+"</div>";
+
+  var html="";
+  for(var j=0;j<names.length;j++){
+    var name=names[j];
+    var cls = name==next ? "card active" : "card";
+    html += '<div class="'+cls+'"><div class="n">'+name+'</div><div class="t">'+times[name]+'</div></div>';
+  }
+  document.getElementById("cards").innerHTML=html;
+}
+
+update();
+setInterval(update,1000);
 </script>
-
 </body>
 </html>
