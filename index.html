@@ -373,7 +373,7 @@ display:none !important;
 <div class="gear">⚙</div>
 
 <script>
-const photos=["foto1.png","foto2.png","foto3.png","foto4.png","foto5.png"];
+const photos=["foto1.jpg","foto2.jpg","foto3.jpg","foto4.jpg","foto5.jpg"];
 
 // Orët sipas versionit të fundit të kërkuar.
 // Imsaku: ora kryesore është ndërruar me orën e majtë.
@@ -411,30 +411,33 @@ function currentMinutes(){
 function getActiveIndex(){
   const now=currentMinutes();
 
-  // Para Imsakut aktivizo kolonën e parë
-  if(now < minutesFromTime(prayers[0].time)){
-    return 0;
-  }
-
-  let active=0;
-
+  // Kolona aktive është vakti i ardhshëm.
+  // Pra nëse ora është 02:24 dhe Sabahu është 04:18,
+  // aktive mbetet Sabahu dhe countdown = 01:54:00.
   for(let i=0;i<prayers.length;i++){
-    if(now >= minutesFromTime(prayers[i].time)){
-      active=i;
+    if(now < minutesFromTime(prayers[i].time)){
+      return i;
     }
   }
 
-  return active;
+  // Nëse kanë kaluar krejt vaktet, vakti i ardhshëm është Sabahu nesër.
+  return 0;
 }
 
-function secondsUntilNext(activeIndex){
-  const nextIndex=(activeIndex+1)%prayers.length;
+function secondsUntilPrayer(activeIndex){
   const now=kosovoNow();
   const target=new Date(now);
-  const a=prayers[nextIndex].time.split(":").map(Number);
+
+  // Countdown merret vetëm prej orës së kolonës aktive.
+  const a=prayers[activeIndex].time.split(":").map(Number);
+
   target.setHours(a[0],a[1],0,0);
+
   let diff=Math.floor((target-now)/1000);
+
+  // Vetëm nëse kjo orë ka kaluar, llogarite për nesër.
   if(diff<=0) diff+=24*3600;
+
   return diff;
 }
 
@@ -469,7 +472,7 @@ function setActive(i){
     c.style.setProperty("--photo",photo);
     const cd=c.querySelector(".countdown");
     if(cd){
-      cd.textContent = n===i ? formatCountdown(secondsUntilNext(i)) : "";
+      cd.textContent = n===i ? formatCountdown(secondsUntilPrayer(i)) : "";
     }
   });
 }
@@ -492,150 +495,13 @@ setInterval(updateAll,1000);
 
 
 
-<script id="same-column-countdown-realpatch">
-(function(){
-"use strict";
 
-function pad(n){ return String(Math.floor(n)).padStart(2,"0"); }
 
-function norm(s){
-  return (s||"").toLowerCase().replace(/ë/g,"e").replace(/\s+/g," ").trim();
-}
 
-function nameOf(el){
-  const t = norm(el.innerText);
-  if(t.includes("sabahu") || t.includes("sabah") || t.includes("imsaku")) return "Sabahu";
-  if(t.includes("dreka") || t.includes("drek")) return "Dreka";
-  if(t.includes("ikindija") || t.includes("ikindi")) return "Ikindija";
-  if(t.includes("akshami")) return "Akshami";
-  if(t.includes("jacia") || t.includes("jacija")) return "Jacia";
-  return "";
-}
 
-function unique(arr){
-  const out=[];
-  arr.forEach(el=>{
-    if(!out.includes(el)) out.push(el);
-  });
-  return out;
-}
 
-function columns(){
-  const selectors = [".col",".column",".card",".prayer-card",".time-card",".vakt-card"];
-  let best = [];
-  selectors.forEach(sel=>{
-    const a = Array.from(document.querySelectorAll(sel)).filter(el => nameOf(el));
-    if(a.length >= 5 && (best.length < 5 || a.length < best.length)) best = a;
-    else if(best.length < 5 && a.length > best.length) best = a;
-  });
 
-  best = unique(best).filter(el=>{
-    // avoid selecting nested text nodes/containers if parent is also one of selected columns
-    return !best.some(other => other !== el && other.contains(el) && nameOf(other));
-  });
 
-  return best.slice(0,5);
-}
-
-function parseTime(v){
-  const m = String(v||"").match(/(\d{1,2})\s*[:.]\s*(\d{2})/);
-  if(!m) return null;
-  const h = parseInt(m[1],10), min = parseInt(m[2],10);
-  if(h<0 || h>23 || min<0 || min>59) return null;
-  return {h:h,min:min};
-}
-
-function timeInColumn(col){
-  // Prefer big/main time element if present
-  const preferred = col.querySelector(".t,.time,.main-time,.hour");
-  if(preferred){
-    const p = parseTime(preferred.innerText);
-    if(p) return p;
-  }
-
-  const matches = (col.innerText||"").match(/\d{1,2}\s*[:.]\s*\d{2}/g);
-  if(!matches || !matches.length) return null;
-
-  // If Sabahu has Imsak + Sabahu, use the main/later time from SAME column.
-  let parsed = matches.map(parseTime).filter(Boolean);
-  if(!parsed.length) return null;
-
-  // Use the biggest clock time in this same column if multiple; that avoids taking Imsaku.
-  parsed.sort((a,b)=>(a.h*60+a.min)-(b.h*60+b.min));
-  return parsed[parsed.length-1];
-}
-
-function diffSec(t){
-  const now = new Date();
-  const target = new Date(now);
-  target.setHours(t.h,t.min,0,0);
-  let d = Math.floor((target - now)/1000);
-  if(d <= 0) d += 86400;
-  return d;
-}
-
-function fmt(sec){
-  const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=sec%60;
-  return pad(h)+":"+pad(m)+":"+pad(s);
-}
-
-function findInfo(col){
-  return col.querySelector(".info") || col;
-}
-
-function ensureCountdown(col){
-  let info = findInfo(col);
-  let el = info.querySelector(".countdown");
-  if(!el){
-    el = document.createElement("div");
-    el.className = "countdown";
-    info.insertBefore(el, info.firstChild);
-  }
-  return el;
-}
-
-function update(){
-  const cols = columns();
-  if(cols.length < 5) return false;
-
-  const data = cols.map((col,i)=>{
-    const t = timeInColumn(col);
-    if(!t) return null;
-    return {col:col, time:t, sec:diffSec(t), index:i};
-  }).filter(Boolean);
-
-  if(data.length < 5) return false;
-
-  data.sort((a,b)=>a.sec-b.sec);
-  const active = data[0];
-
-  cols.forEach(c=>{
-    c.classList.remove("active");
-    const info = findInfo(c);
-    Array.from(info.querySelectorAll(".countdown")).forEach(e=>e.style.display="none");
-  });
-
-  active.col.classList.add("active");
-  const cd = ensureCountdown(active.col);
-  cd.style.display = "";
-  cd.textContent = fmt(active.sec);
-
-  return true;
-}
-
-function start(){
-  update();
-  setInterval(update,1000);
-
-  // If original page renders later, patch after it.
-  setTimeout(update,300);
-  setTimeout(update,1000);
-  setTimeout(update,2500);
-}
-
-document.addEventListener("DOMContentLoaded", start);
-})();
-</script>
 
 <script id="bahnhof-clock-js">
 (function(){
