@@ -389,6 +389,7 @@ image-rendering:auto !important;
 
 <script>
 const photos=["foto1.jpg","foto2.jpg","foto3.jpg","foto4.jpg","foto5.jpg"];
+photos.forEach(src=>{ const img=new Image(); img.src=src; });
 
 // Orët sipas versionit të fundit të kërkuar.
 // Imsaku: ora kryesore është ndërruar me orën e majtë.
@@ -552,41 +553,8 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 
 
-<script id="tv-photo-render-fix">
-(function(){
+<!-- TV photo render fix removed: photos are loaded directly via CSS background-image -->
 
-document.addEventListener('DOMContentLoaded', function(){
-
- const cols = Array.from(document.querySelectorAll('.col'));
-
- cols.forEach(function(col){
-
-   const style = getComputedStyle(col);
-   const bg = style.backgroundImage;
-
-   if(bg && bg !== 'none'){
-
-      const match = bg.match(/url\(["']?(.*?)["']?\)/);
-
-      if(match && match[1]){
-
-         const img = document.createElement('img');
-         img.src = match[1];
-
-         col.style.backgroundImage = 'none';
-
-         if(!col.querySelector('img')){
-            col.prepend(img);
-         }
-      }
-   }
-
- });
-
-});
-
-})();
-</script>
 
 </body>
 </html>
