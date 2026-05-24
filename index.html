@@ -96,7 +96,7 @@ background-image:var(--photo);
 background-size:500% auto;
 background-position:var(--pos) center;
 background-repeat:no-repeat;
-filter:brightness(.86) saturate(1.05);
+
 transition:background-image .8s ease,filter .45s ease;
 }
 
@@ -114,7 +114,7 @@ box-shadow:0 0 34px rgba(255,222,92,.8),0 16px 44px rgba(0,0,0,.55);
 }
 
 .col.active::before{
-filter:brightness(1.13) saturate(1.16);
+
 }
 
 .info{
@@ -331,6 +331,21 @@ display:none !important;
 }
 </style>
 
+
+<style id="tv-photo-stable-css">
+.col{
+overflow:hidden !important;
+}
+
+.col img{
+width:100% !important;
+height:100% !important;
+object-fit:contain !important;
+display:block !important;
+image-rendering:auto !important;
+}
+</style>
+
 </head>
 <body>
 
@@ -531,6 +546,43 @@ function updateClock(){
 document.addEventListener('DOMContentLoaded', function(){
  updateClock();
  setInterval(updateClock,1000);
+});
+
+})();
+</script>
+
+
+<script id="tv-photo-render-fix">
+(function(){
+
+document.addEventListener('DOMContentLoaded', function(){
+
+ const cols = Array.from(document.querySelectorAll('.col'));
+
+ cols.forEach(function(col){
+
+   const style = getComputedStyle(col);
+   const bg = style.backgroundImage;
+
+   if(bg && bg !== 'none'){
+
+      const match = bg.match(/url\(["']?(.*?)["']?\)/);
+
+      if(match && match[1]){
+
+         const img = document.createElement('img');
+         img.src = match[1];
+
+         col.style.backgroundImage = 'none';
+
+         if(!col.querySelector('img')){
+            col.prepend(img);
+         }
+      }
+   }
+
+ });
+
 });
 
 })();
