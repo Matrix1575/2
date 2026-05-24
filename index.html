@@ -74,12 +74,35 @@ text-shadow:0 2px 8px rgba(0,0,0,.35);
 white-space:nowrap;
 }
 
-/* ORA BAHNHOF E THJESHTE - E RREGULLUAR */
+/* ORA DIGJITALE */
 .clockwrap{
 justify-self:end;
 display:flex;
 align-items:center;
 justify-content:center;
+}
+
+
+/* ORA DIGJITALE - SI COUNTDOWN ME NDRIÇIM */
+.digital-clock{
+  min-width:265px;
+  height:78px;
+  padding:8px 28px;
+  border-radius:8px;
+  background:rgba(8,32,50,1);
+  color:#fff;
+  border:2px solid #49fff0;
+  box-shadow:0 0 18px rgba(73,255,240,.75),0 6px 20px rgba(0,0,0,.75);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:62px;
+  font-weight:900;
+  letter-spacing:3px;
+  line-height:1;
+  text-align:center;
+  text-shadow:0 0 10px rgba(73,255,240,.45),0 3px 12px rgba(0,0,0,.95);
+  white-space:nowrap;
 }
 
 .bahnhof-clock{
@@ -182,7 +205,19 @@ pointer-events:none;
 
 .col.active{
 border:2px solid #49fff0;
-box-shadow:0 0 26px rgba(73,255,240,.65),0 14px 36px rgba(0,0,0,.38);
+background:linear-gradient(180deg,rgba(41,121,155,.96),rgba(12,78,105,.98));
+box-shadow:
+  0 0 34px rgba(73,255,240,.95),
+  0 0 78px rgba(73,255,240,.45),
+  inset 0 0 34px rgba(73,255,240,.42),
+  inset 0 0 95px rgba(255,255,255,.12),
+  0 14px 36px rgba(0,0,0,.38);
+}
+
+.col.active::after{
+background:
+  radial-gradient(circle at center,rgba(255,255,255,.28),transparent 62%),
+  linear-gradient(180deg,rgba(73,255,240,.22),rgba(73,255,240,.08));
 }
 
 .info{
@@ -304,6 +339,7 @@ letter-spacing:1px;
 .lefttitle .line3{font-size:17px}
 .calendar{font-size:18px}
 .bahnhof-clock{width:88px;height:88px}
+.digital-clock{min-width:170px;height:54px;font-size:36px;padding:6px 16px;letter-spacing:2px}
 .mark{height:9px;margin-top:-40px;transform-origin:2px 40px}
 .mark.small{height:5px;margin-top:-38px;transform-origin:1px 38px}
 .hour{height:25px;width:5px;margin-left:-2.5px;margin-top:-25px}
@@ -429,71 +465,7 @@ z-index:999999 !important;
     <div class="calendar" id="calendarText">24.05.2026 / 7 Dhul Hijjah 1447</div>
 
     <div class="clockwrap">
-      <div class="bahnhof-clock">
-        <div class="mark" style="transform:rotate(0deg)"></div>
-        <div class="mark small" style="transform:rotate(6deg)"></div>
-        <div class="mark small" style="transform:rotate(12deg)"></div>
-        <div class="mark small" style="transform:rotate(18deg)"></div>
-        <div class="mark small" style="transform:rotate(24deg)"></div>
-        <div class="mark" style="transform:rotate(30deg)"></div>
-        <div class="mark small" style="transform:rotate(36deg)"></div>
-        <div class="mark small" style="transform:rotate(42deg)"></div>
-        <div class="mark small" style="transform:rotate(48deg)"></div>
-        <div class="mark small" style="transform:rotate(54deg)"></div>
-        <div class="mark" style="transform:rotate(60deg)"></div>
-        <div class="mark small" style="transform:rotate(66deg)"></div>
-        <div class="mark small" style="transform:rotate(72deg)"></div>
-        <div class="mark small" style="transform:rotate(78deg)"></div>
-        <div class="mark small" style="transform:rotate(84deg)"></div>
-        <div class="mark" style="transform:rotate(90deg)"></div>
-        <div class="mark small" style="transform:rotate(96deg)"></div>
-        <div class="mark small" style="transform:rotate(102deg)"></div>
-        <div class="mark small" style="transform:rotate(108deg)"></div>
-        <div class="mark small" style="transform:rotate(114deg)"></div>
-        <div class="mark" style="transform:rotate(120deg)"></div>
-        <div class="mark small" style="transform:rotate(126deg)"></div>
-        <div class="mark small" style="transform:rotate(132deg)"></div>
-        <div class="mark small" style="transform:rotate(138deg)"></div>
-        <div class="mark small" style="transform:rotate(144deg)"></div>
-        <div class="mark" style="transform:rotate(150deg)"></div>
-        <div class="mark small" style="transform:rotate(156deg)"></div>
-        <div class="mark small" style="transform:rotate(162deg)"></div>
-        <div class="mark small" style="transform:rotate(168deg)"></div>
-        <div class="mark small" style="transform:rotate(174deg)"></div>
-        <div class="mark" style="transform:rotate(180deg)"></div>
-        <div class="mark small" style="transform:rotate(186deg)"></div>
-        <div class="mark small" style="transform:rotate(192deg)"></div>
-        <div class="mark small" style="transform:rotate(198deg)"></div>
-        <div class="mark small" style="transform:rotate(204deg)"></div>
-        <div class="mark" style="transform:rotate(210deg)"></div>
-        <div class="mark small" style="transform:rotate(216deg)"></div>
-        <div class="mark small" style="transform:rotate(222deg)"></div>
-        <div class="mark small" style="transform:rotate(228deg)"></div>
-        <div class="mark small" style="transform:rotate(234deg)"></div>
-        <div class="mark" style="transform:rotate(240deg)"></div>
-        <div class="mark small" style="transform:rotate(246deg)"></div>
-        <div class="mark small" style="transform:rotate(252deg)"></div>
-        <div class="mark small" style="transform:rotate(258deg)"></div>
-        <div class="mark small" style="transform:rotate(264deg)"></div>
-        <div class="mark" style="transform:rotate(270deg)"></div>
-        <div class="mark small" style="transform:rotate(276deg)"></div>
-        <div class="mark small" style="transform:rotate(282deg)"></div>
-        <div class="mark small" style="transform:rotate(288deg)"></div>
-        <div class="mark small" style="transform:rotate(294deg)"></div>
-        <div class="mark" style="transform:rotate(300deg)"></div>
-        <div class="mark small" style="transform:rotate(306deg)"></div>
-        <div class="mark small" style="transform:rotate(312deg)"></div>
-        <div class="mark small" style="transform:rotate(318deg)"></div>
-        <div class="mark small" style="transform:rotate(324deg)"></div>
-        <div class="mark" style="transform:rotate(330deg)"></div>
-        <div class="mark small" style="transform:rotate(336deg)"></div>
-        <div class="mark small" style="transform:rotate(342deg)"></div>
-        <div class="mark small" style="transform:rotate(348deg)"></div>
-        <div class="mark small" style="transform:rotate(354deg)"></div>
-
-        <div class="hand hour" id="hourHand"></div>
-        <div class="hand minute" id="minuteHand"></div>
-      </div>
+      <div class="digital-clock" id="digitalClock">--:--</div>
     </div>
   </div>
 
@@ -596,16 +568,12 @@ function updateAll(){
   setActive(getActiveIndex());
 }
 
-function updateBahnhofClock(){
+function updateDigitalClock(){
   const now=kosovoNow();
-  const min=now.getMinutes();
-  const hr=now.getHours()%12;
-
-  const minDeg=min*6;
-  const hrDeg=hr*30+min*.5;
-
-  document.getElementById("minuteHand").style.transform="rotate("+minDeg+"deg)";
-  document.getElementById("hourHand").style.transform="rotate("+hrDeg+"deg)";
+  const h=String(now.getHours()).padStart(2,"0");
+  const m=String(now.getMinutes()).padStart(2,"0");
+  const el=document.getElementById("digitalClock");
+  if(el) el.textContent=h+":"+m;
 }
 
 
@@ -636,10 +604,10 @@ function fixIconsForTV(){
 build();
 fixIconsForTV();
 updateAll();
-updateBahnhofClock();
+updateDigitalClock();
 
 setInterval(updateAll,1000);
-setInterval(updateBahnhofClock,60000);
+setInterval(updateDigitalClock,1000);
 setInterval(fixIconsForTV,60000);
 
 
