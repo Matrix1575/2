@@ -2,345 +2,673 @@
 <html lang="sq">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vaktia e Namazit - Xhamia Topanicë 1</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Vaktia e Namazit - Topanicë 1</title>
 <style>
-*{box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box}
+
 html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  font-family:Arial,Helvetica,sans-serif;
-  color:white;
-  background:
-    radial-gradient(circle at 18% 0%,rgba(96,166,205,.35),transparent 32%),
-    linear-gradient(135deg,#4b7fa2 0%,#2c5a79 42%,#17324c 100%);
+width:100%;
+height:100%;
+overflow:hidden;
+font-family:Arial,Helvetica,sans-serif;
+color:#fff;
+background:linear-gradient(180deg,#627684 0%,#4b5f6d 38%,#26323b 100%);
 }
-.screen{
-  width:100vw;
-  height:100vh;
-  padding:16px 28px 20px;
-  display:grid;
-  grid-template-rows:145px 1fr 44px;
-  gap:28px;
+
+.container{
+height:100vh;
+padding:18px 24px 12px;
+display:flex;
+flex-direction:column;
 }
-.header{
-  background:rgba(8,27,48,.72);
-  border-radius:7px;
-  box-shadow:0 10px 24px rgba(0,0,0,.22);
-  display:grid;
-  grid-template-columns:1fr 1fr 165px;
-  align-items:center;
-  padding:18px 26px;
+
+.headerline{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+margin-bottom:18px;
 }
-.title{
-  color:#6ed8b6;
+
+.lefttitle{
+text-align:left;
+font-weight:900;
 }
-.title-main{
-  font-size:36px;
-  line-height:1.12;
-  font-weight:400;
+
+.small{
+font-size:34px;
+font-weight:900;
+line-height:1;
+text-shadow:0 3px 10px rgba(0,0,0,.75);
 }
-.title-sub{
-  margin-top:8px;
-  font-size:23px;
-  color:#71d4b7;
+
+.big{
+font-size:42px;
+font-weight:900;
+line-height:.95;
+margin-top:4px;
+letter-spacing:.3px;
+text-shadow:0 4px 14px rgba(0,0,0,.85);
 }
-.timeTop{
-  text-align:center;
+
+.rightclock{
+text-align:right;
+padding-top:8px;
 }
-#clock{
-  font-size:78px;
-  font-weight:300;
-  line-height:.95;
-  letter-spacing:1px;
+
+.timebig{
+font-size:58px;
+font-weight:900;
+line-height:1;
+text-shadow:0 4px 14px rgba(0,0,0,.85);
 }
-#date{
-  margin-top:13px;
-  font-size:22px;
-  color:#69d7b8;
+
+.status{
+height:0;
+overflow:hidden;
 }
-.logo{
-  justify-self:end;
-  width:115px;
-  height:115px;
-  border-radius:50%;
-  background:#f5f7f7;
-  color:#08704f;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  border:2px solid rgba(255,255,255,.85);
-  box-shadow:0 6px 18px rgba(0,0,0,.25);
-  font-weight:bold;
-  line-height:1.08;
-  font-size:18px;
+
+.cols{
+flex:1;
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:14px;
+min-height:0;
+padding-top:70px;
+padding-bottom:18px;
 }
-.logo small{
-  font-size:15px;
+
+.col{
+position:relative;
+overflow:hidden;
+border-radius:18px;
+border:2px solid rgba(255,255,255,.25);
+background:rgba(255,255,255,.08);
+transition:.45s ease;
+box-shadow:0 12px 32px rgba(0,0,0,.28);
 }
-.cards{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:22px;
-  min-height:0;
+
+.col::before{
+content:"";
+position:absolute;
+inset:0;
+background-image:var(--photo);
+background-size:500% auto;
+background-position:var(--pos) center;
+background-repeat:no-repeat;
+filter:brightness(.86) saturate(1.05);
+transition:background-image .8s ease,filter .45s ease;
 }
-.card{
-  position:relative;
-  background:rgba(9,29,50,.72);
-  border:1px solid rgba(255,255,255,.14);
-  border-radius:7px;
-  box-shadow:inset 0 0 38px rgba(255,255,255,.025),0 10px 22px rgba(0,0,0,.18);
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  padding-top:72px;
+
+.col::after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(to bottom,rgba(0,0,0,.30),rgba(0,0,0,.04) 40%,rgba(0,0,0,.66) 100%);
 }
-.card.active{
-  background:
-    radial-gradient(circle at 52% 30%,rgba(255,255,255,.23),transparent 17%),
-    linear-gradient(180deg,#a9bbc4 0%,#c0c0bd 45%,#e6ba92 100%);
-  border-color:rgba(255,255,255,.58);
+
+.col.active{
+transform:translateY(-6px);
+border:4px solid #ffe77d;
+box-shadow:0 0 34px rgba(255,222,92,.8),0 16px 44px rgba(0,0,0,.55);
 }
-.card.active .name,
-.card.active .time,
-.card.active .icon,
-.card.active .subTimes,
-.card.active .fixedTime{
-  color:white;
+
+.col.active::before{
+filter:brightness(1.13) saturate(1.16);
 }
+
+.info{
+position:absolute;
+left:0;
+right:0;
+top:50%;
+transform:translateY(-50%);
+z-index:2;
+width:100%;
+height:230px;
+text-align:center;
+text-shadow:0 3px 12px rgba(0,0,0,.95);
+}
+
 .countdown{
-  position:absolute;
-  top:54px;
-  left:24px;
-  right:24px;
-  background:rgba(25,44,62,.78);
-  border-radius:5px;
-  height:56px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:"Courier New",monospace;
-  font-size:32px;
-  letter-spacing:1px;
-  z-index:3;
+display:none;
+position:absolute;
+top:-58px;
+left:50%;
+transform:translateX(-50%);
+padding:8px 16px;
+min-width:165px;
+border-radius:6px;
+background:rgba(13,42,64,.88);
+font-size:26px;
+font-weight:600;
+letter-spacing:2px;
+color:#fff;
+box-shadow:0 3px 12px rgba(0,0,0,.45);
+text-shadow:0 2px 8px rgba(0,0,0,.75);
+white-space:nowrap;
+z-index:10;
 }
-.inner{
-  height:275px;
-  display:grid;
-  grid-template-rows:76px 48px 78px 42px;
-  align-items:center;
-  justify-items:center;
-  transform:translateY(10px);
+
+.col.active .countdown{
+display:block;
 }
-.icon{
-  font-size:56px;
-  height:76px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.icon-img{
-  font-size:62px;
-  filter:drop-shadow(0 2px 0 rgba(0,0,0,.45));
-}
+
 .name{
-  font-size:34px;
-  font-weight:400;
-  line-height:1;
+position:absolute;
+top:0;
+left:0;
+right:0;
+height:38px;
+font-size:32px;
+font-weight:900;
+line-height:38px;
+text-align:center;
+margin:0;
+padding:0;
+display:block;
 }
-.time{
-  font-size:64px;
-  font-weight:300;
-  line-height:1;
-  letter-spacing:1px;
+
+.t{
+position:absolute;
+top:62px;
+left:0;
+right:0;
+height:64px;
+font-size:58px;
+font-weight:900;
+line-height:64px;
+letter-spacing:1px;
+text-align:center;
+margin:0;
+padding:0;
+display:block;
 }
-.subTimes{
-  font-size:30px;
-  line-height:1;
-  display:flex;
-  gap:24px;
-  align-items:center;
-  justify-content:center;
+
+.subtimes{
+position:absolute;
+top:138px;
+left:0;
+right:0;
+display:flex;
+justify-content:center;
+gap:24px;
+font-size:28px;
+font-weight:700;
+line-height:1;
 }
-.fixedTime{
-  font-size:30px;
-  line-height:1;
+
+.col.active .name,
+.col.active .t{
+color:#ffffff;
 }
-.footer{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  align-items:center;
-  color:white;
-  font-size:20px;
-  padding:0 4px;
+
+.bottom{
+height:10px;
+margin-top:10px;
 }
-.footer .center{
-  text-align:center;
-  color:#68d5b2;
-  font-weight:bold;
+
+.gear{
+position:fixed;
+right:14px;
+bottom:10px;
+font-size:24px;
+opacity:.5;
 }
-.footer .right{
-  text-align:right;
-  font-size:28px;
-}
+
 @media(max-width:900px){
-  body{overflow:auto}
-  .screen{height:auto;min-height:100vh;grid-template-rows:auto auto auto;padding:14px;gap:16px}
-  .header{grid-template-columns:1fr;text-align:center;gap:14px}
-  .logo{justify-self:center}
-  .cards{grid-template-columns:1fr}
-  .card{height:450px}
-  #clock{font-size:58px}
+.container{padding:12px 10px 8px}
+.small{font-size:22px}
+.big{font-size:32px}
+.timebig{font-size:38px}
+.cols{
+flex:1;
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:14px;
+min-height:0;
+padding-top:55px;
+padding-bottom:18px;
+}
+.col{border-radius:14px}
+.info{height:180px}
+.name{font-size:20px;line-height:26px;height:26px}
+.t{font-size:36px;line-height:42px;height:42px;top:44px}
+.subtimes{top:92px;font-size:18px}
+.countdown{top:-42px;font-size:18px;min-width:120px}
 }
 </style>
+
+<style id="hide-old-clock">
+#clock,
+.digital-clock,
+.live-clock,
+.real-clock,
+.time-display,
+.top-clock{
+display:none !important;
+}
+</style>
+
+
+<style id="bahnhof-basel-style">
+.bahnhof-clock{
+position:fixed;
+top:18px;
+right:42px;
+width:135px;
+height:135px;
+border-radius:50%;
+background:#fff;
+border:6px solid #111;
+box-shadow:0 0 24px rgba(0,0,0,.45);
+z-index:99999;
+}
+
+.bahnhof-clock::before{
+content:'';
+position:absolute;
+top:50%;
+left:50%;
+width:16px;
+height:16px;
+background:#d40000;
+border-radius:50%;
+transform:translate(-50%,-50%);
+z-index:20;
+}
+
+.clock-mark{
+position:absolute;
+width:4px;
+height:14px;
+background:#111;
+left:50%;
+top:6px;
+margin-left:-2px;
+transform-origin:center 61px;
+}
+
+.clock-hand{
+position:absolute;
+left:50%;
+bottom:50%;
+transform-origin:bottom center;
+border-radius:10px;
+}
+
+.hour-hand{
+width:6px;
+height:34px;
+background:#111;
+margin-left:-3px;
+}
+
+.minute-hand{
+width:4px;
+height:52px;
+background:#111;
+margin-left:-2px;
+}
+
+.second-hand{
+width:2px;
+height:58px;
+background:#d40000;
+margin-left:-1px;
+}
+</style>
+
+
+<style id="hide-old-clock-final">
+#clock,
+.digital-clock,
+.live-clock,
+.real-clock,
+.time-display,
+.top-clock{
+display:none !important;
+}
+</style>
+
 </head>
 <body>
-<div class="screen">
-  <div class="header">
-    <div class="title">
-      <div class="title-main">Xhamia e fshatit<br>Topanicë 1</div>
-      <div class="title-sub">Topanicë · Kamenicë</div>
-    </div>
-    <div class="timeTop">
-      <div id="clock">--:--</div>
-      <div id="date">--</div>
-    </div>
-    <div class="logo">
-      BIK<br><small>Takvimi</small><small>2026</small>
-    </div>
-  </div>
 
-  <div class="cards" id="cards"></div>
+<div class="bahnhof-clock">
+  <div class="clock-mark" style="transform:rotate(0deg)"></div>
+  <div class="clock-mark" style="transform:rotate(30deg)"></div>
+  <div class="clock-mark" style="transform:rotate(60deg)"></div>
+  <div class="clock-mark" style="transform:rotate(90deg)"></div>
+  <div class="clock-mark" style="transform:rotate(120deg)"></div>
+  <div class="clock-mark" style="transform:rotate(150deg)"></div>
+  <div class="clock-mark" style="transform:rotate(180deg)"></div>
+  <div class="clock-mark" style="transform:rotate(210deg)"></div>
+  <div class="clock-mark" style="transform:rotate(240deg)"></div>
+  <div class="clock-mark" style="transform:rotate(270deg)"></div>
+  <div class="clock-mark" style="transform:rotate(300deg)"></div>
+  <div class="clock-mark" style="transform:rotate(330deg)"></div>
 
-  <div class="footer">
-    <div>⌂&nbsp; General</div>
-    <div class="center">Made in JUPI</div>
-    <div class="right">⚙</div>
-  </div>
+  <div class="clock-hand hour-hand" id="hourHand"></div>
+  <div class="clock-hand minute-hand" id="minuteHand"></div>
+  <div class="clock-hand second-hand" id="secondHand"></div>
 </div>
 
+
+<div class="container">
+  <div class="headerline">
+    <div class="lefttitle">
+      <div class="small">Xhamia e fshatit</div>
+      <div class="big">Topanicë 1</div>
+    </div>
+    <div class="rightclock">
+      <div class="timebig" id="clock">--:--</div>
+      <div class="status" id="status"></div>
+    </div>
+  </div>
+
+  <div class="cols" id="cols"></div>
+  <div class="bottom"></div>
+</div>
+
+<div class="gear">⚙</div>
+
 <script>
-/*
-  Kohët janë vendosur sipas shembullit të fotos.
-  Pastaj mund t'i zëvendësosh me tabelën zyrtare BIK 2026 brenda objektit TAKVIMI.
-*/
-var TAKVIMI={
-  "2026-05-23":{
-    imsaku:"02:56",
-    sabahu:"03:16",
-    lindja:"04:58",
-    dreka:"12:35",
-    ikindia:"16:36",
-    akshami:"20:06",
-    jacia:"22:02"
+const photos=["foto1.png","foto2.png","foto3.png","foto4.png","foto5.png"];
+
+// Orët sipas versionit të fundit të kërkuar.
+// Imsaku: ora kryesore është ndërruar me orën e majtë.
+// Dreka: ora kryesore është ndërruar me orën poshtë.
+const prayers=[
+  {name:"Sabahu",  time:"04:18", sub:["02:56","04:58"]},
+  {name:"Dreka",   time:"13:00", sub:["12:35"]},
+  {name:"Ikindia", time:"16:36", sub:[]},
+  {name:"Akshami", time:"20:06", sub:[]},
+  {name:"Jacia",   time:"22:02", sub:[]}
+];
+
+const cols=document.getElementById("cols");
+
+function kosovoNow(){
+  const parts = new Intl.DateTimeFormat("en-GB",{
+    timeZone:"Europe/Belgrade",
+    year:"numeric",month:"2-digit",day:"2-digit",
+    hour:"2-digit",minute:"2-digit",second:"2-digit",
+    hour12:false
+  }).formatToParts(new Date()).reduce((a,p)=>{a[p.type]=p.value;return a;},{});
+  return new Date(`${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}:${parts.second}`);
+}
+
+function minutesFromTime(t){
+  const a=t.split(":").map(Number);
+  return a[0]*60+a[1];
+}
+
+function currentMinutes(){
+  const n=kosovoNow();
+  return n.getHours()*60+n.getMinutes();
+}
+
+function getActiveIndex(){
+  const now=currentMinutes();
+
+  // Para Imsakut aktivizo kolonën e parë
+  if(now < minutesFromTime(prayers[0].time)){
+    return 0;
   }
-};
 
-var DEFAULT_TIMES={
-  imsaku:"02:56",
-  sabahu:"03:16",
-  lindja:"04:58",
-  dreka:"12:35",
-  ikindia:"16:36",
-  akshami:"20:06",
-  jacia:"22:02"
-};
+  let active=0;
 
-var ORDER=["Imsaku","Dreka","Ikindia","Akshami","Jacia"];
-
-function pad(n){return (n<10?"0":"")+n}
-function keyDate(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
-function toMin(t){var p=t.split(":");return parseInt(p[0],10)*60+parseInt(p[1],10)}
-function getTimes(d){
-  var r=TAKVIMI[keyDate(d)] || DEFAULT_TIMES;
-  return {
-    Imsaku:r.imsaku,
-    Sabahu:r.sabahu,
-    Lindja:r.lindja,
-    Dreka:r.dreka,
-    Ikindia:r.ikindia,
-    Akshami:r.akshami,
-    Jacia:r.jacia
-  };
-}
-function nextPrayer(times,now){
-  var cur=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
-  var next="Imsaku",remain=0;
-  for(var i=0;i<ORDER.length;i++){
-    var m=toMin(times[ORDER[i]]);
-    if(m>cur){next=ORDER[i];remain=m-cur;break}
+  for(let i=0;i<prayers.length;i++){
+    if(now >= minutesFromTime(prayers[i].time)){
+      active=i;
+    }
   }
-  if(remain===0){remain=toMin(times.Imsaku)+1440-cur}
-  return {name:next,remain:remain};
+
+  return active;
 }
-function formatRemain(mins){
-  var sec=Math.max(0,Math.floor(mins*60));
-  var h=Math.floor(sec/3600);
-  var m=Math.floor((sec%3600)/60);
-  var s=sec%60;
-  return pad(h)+":"+pad(m)+":"+pad(s);
+
+function secondsUntilNext(activeIndex){
+  const nextIndex=(activeIndex+1)%prayers.length;
+  const now=kosovoNow();
+  const target=new Date(now);
+  const a=prayers[nextIndex].time.split(":").map(Number);
+  target.setHours(a[0],a[1],0,0);
+  let diff=Math.floor((target-now)/1000);
+  if(diff<=0) diff+=24*3600;
+  return diff;
 }
-function isSummerTime(d){
-  var jan=new Date(d.getFullYear(),0,1).getTimezoneOffset();
-  return d.getTimezoneOffset()<jan;
+
+function formatCountdown(sec){
+  const h=String(Math.floor(sec/3600)).padStart(2,"0");
+  const m=String(Math.floor((sec%3600)/60)).padStart(2,"0");
+  const s=String(sec%60).padStart(2,"0");
+  return `${h}:${m}:${s}`;
 }
-function iconFor(n){
-  if(n==="Imsaku") return "◓";
-  if(n==="Dreka") return "☀";
-  if(n==="Ikindia") return "🌅";
-  if(n==="Akshami") return "◒";
-  if(n==="Jacia") return "☾";
+
+function build(){
+  cols.innerHTML="";
+  prayers.forEach((p,i)=>{
+    const d=document.createElement("div");
+    d.className="col";
+    d.style.setProperty("--pos",(i*25)+"%");
+    d.innerHTML=`
+      <div class="info">
+        <div class="countdown">--:--:--</div>
+        <div class="name">${p.name}</div>
+        <div class="t">${p.time}</div>
+        <div class="subtimes">${(p.sub||[]).map(x=>`<span>${x}</span>`).join("")}</div>
+      </div>`;
+    cols.appendChild(d);
+  });
+}
+
+function setActive(i){
+  const photo=`url("${photos[i]}")`;
+  document.querySelectorAll(".col").forEach((c,n)=>{
+    c.classList.toggle("active",n===i);
+    c.style.setProperty("--photo",photo);
+    const cd=c.querySelector(".countdown");
+    if(cd){
+      cd.textContent = n===i ? formatCountdown(secondsUntilNext(i)) : "";
+    }
+  });
+}
+
+function updateClock(){
+  const now=kosovoNow();
+  document.getElementById("clock").innerText =
+    `${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+}
+
+function updateAll(){
+  updateClock();
+  setActive(getActiveIndex());
+}
+
+build();
+updateAll();
+setInterval(updateAll,1000);
+</script>
+
+
+
+<script id="same-column-countdown-realpatch">
+(function(){
+"use strict";
+
+function pad(n){ return String(Math.floor(n)).padStart(2,"0"); }
+
+function norm(s){
+  return (s||"").toLowerCase().replace(/ë/g,"e").replace(/\s+/g," ").trim();
+}
+
+function nameOf(el){
+  const t = norm(el.innerText);
+  if(t.includes("sabahu") || t.includes("sabah") || t.includes("imsaku")) return "Sabahu";
+  if(t.includes("dreka") || t.includes("drek")) return "Dreka";
+  if(t.includes("ikindija") || t.includes("ikindi")) return "Ikindija";
+  if(t.includes("akshami")) return "Akshami";
+  if(t.includes("jacia") || t.includes("jacija")) return "Jacia";
   return "";
 }
-function timeFor(times,n){
-  if(n==="Imsaku") return times.Imsaku;
-  if(n==="Dreka") return times.Dreka;
-  if(n==="Ikindia") return times.Ikindia;
-  if(n==="Akshami") return times.Akshami;
-  if(n==="Jacia") return times.Jacia;
+
+function unique(arr){
+  const out=[];
+  arr.forEach(el=>{
+    if(!out.includes(el)) out.push(el);
+  });
+  return out;
 }
-function update(){
-  var now=new Date();
-  var hh=pad(now.getHours()),mm=pad(now.getMinutes());
-  document.getElementById("clock").innerHTML=hh+":"+mm;
-  document.getElementById("date").innerHTML=pad(now.getDate())+"."+pad(now.getMonth()+1)+"."+now.getFullYear()+" / 6 Dhul Hixhxhe 1447";
 
-  var times=getTimes(now);
-  var np=nextPrayer(times,now);
-  var html="";
+function columns(){
+  const selectors = [".col",".column",".card",".prayer-card",".time-card",".vakt-card"];
+  let best = [];
+  selectors.forEach(sel=>{
+    const a = Array.from(document.querySelectorAll(sel)).filter(el => nameOf(el));
+    if(a.length >= 5 && (best.length < 5 || a.length < best.length)) best = a;
+    else if(best.length < 5 && a.length > best.length) best = a;
+  });
 
-  for(var i=0;i<ORDER.length;i++){
-    var n=ORDER[i];
-    var active=(n===np.name);
-    html+='<div class="card '+(active?'active':'')+'">';
-    if(active && n!=="Dreka"){
-      html+='<div class="countdown">'+formatRemain(np.remain)+'</div>';
-    }
-    html+='<div class="inner">';
-    html+='<div class="icon '+(n==="Ikindia"?'icon-img':'')+'">'+iconFor(n)+'</div>';
-    html+='<div class="name">'+n+'</div>';
-    html+='<div class="time">'+timeFor(times,n)+'</div>';
+  best = unique(best).filter(el=>{
+    // avoid selecting nested text nodes/containers if parent is also one of selected columns
+    return !best.some(other => other !== el && other.contains(el) && nameOf(other));
+  });
 
-    if(n==="Imsaku"){
-      html+='<div class="subTimes"><span>'+times.Sabahu+'</span><span>'+times.Lindja+'</span></div>';
-    } else if(n==="Dreka"){
-      html+='<div class="fixedTime">'+(isSummerTime(now)?"13:00":"12:00")+'</div>';
-    } else {
-      html+='<div class="subTimes"></div>';
-    }
+  return best.slice(0,5);
+}
 
-    html+='</div></div>';
+function parseTime(v){
+  const m = String(v||"").match(/(\d{1,2})\s*[:.]\s*(\d{2})/);
+  if(!m) return null;
+  const h = parseInt(m[1],10), min = parseInt(m[2],10);
+  if(h<0 || h>23 || min<0 || min>59) return null;
+  return {h:h,min:min};
+}
+
+function timeInColumn(col){
+  // Prefer big/main time element if present
+  const preferred = col.querySelector(".t,.time,.main-time,.hour");
+  if(preferred){
+    const p = parseTime(preferred.innerText);
+    if(p) return p;
   }
 
-  document.getElementById("cards").innerHTML=html;
+  const matches = (col.innerText||"").match(/\d{1,2}\s*[:.]\s*\d{2}/g);
+  if(!matches || !matches.length) return null;
+
+  // If Sabahu has Imsak + Sabahu, use the main/later time from SAME column.
+  let parsed = matches.map(parseTime).filter(Boolean);
+  if(!parsed.length) return null;
+
+  // Use the biggest clock time in this same column if multiple; that avoids taking Imsaku.
+  parsed.sort((a,b)=>(a.h*60+a.min)-(b.h*60+b.min));
+  return parsed[parsed.length-1];
 }
-update();
-setInterval(update,1000);
+
+function diffSec(t){
+  const now = new Date();
+  const target = new Date(now);
+  target.setHours(t.h,t.min,0,0);
+  let d = Math.floor((target - now)/1000);
+  if(d <= 0) d += 86400;
+  return d;
+}
+
+function fmt(sec){
+  const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=sec%60;
+  return pad(h)+":"+pad(m)+":"+pad(s);
+}
+
+function findInfo(col){
+  return col.querySelector(".info") || col;
+}
+
+function ensureCountdown(col){
+  let info = findInfo(col);
+  let el = info.querySelector(".countdown");
+  if(!el){
+    el = document.createElement("div");
+    el.className = "countdown";
+    info.insertBefore(el, info.firstChild);
+  }
+  return el;
+}
+
+function update(){
+  const cols = columns();
+  if(cols.length < 5) return false;
+
+  const data = cols.map((col,i)=>{
+    const t = timeInColumn(col);
+    if(!t) return null;
+    return {col:col, time:t, sec:diffSec(t), index:i};
+  }).filter(Boolean);
+
+  if(data.length < 5) return false;
+
+  data.sort((a,b)=>a.sec-b.sec);
+  const active = data[0];
+
+  cols.forEach(c=>{
+    c.classList.remove("active");
+    const info = findInfo(c);
+    Array.from(info.querySelectorAll(".countdown")).forEach(e=>e.style.display="none");
+  });
+
+  active.col.classList.add("active");
+  const cd = ensureCountdown(active.col);
+  cd.style.display = "";
+  cd.textContent = fmt(active.sec);
+
+  return true;
+}
+
+function start(){
+  update();
+  setInterval(update,1000);
+
+  // If original page renders later, patch after it.
+  setTimeout(update,300);
+  setTimeout(update,1000);
+  setTimeout(update,2500);
+}
+
+document.addEventListener("DOMContentLoaded", start);
+})();
 </script>
+
+<script id="bahnhof-clock-js">
+(function(){
+
+function updateClock(){
+
+ const now = new Date();
+
+ const sec = now.getSeconds();
+ const min = now.getMinutes();
+ const hr = now.getHours()%12;
+
+ const secDeg = sec * 6;
+ const minDeg = min * 6 + sec * 0.1;
+ const hrDeg = hr * 30 + min * 0.5;
+
+ document.getElementById('secondHand').style.transform =
+   'rotate(' + secDeg + 'deg)';
+
+ document.getElementById('minuteHand').style.transform =
+   'rotate(' + minDeg + 'deg)';
+
+ document.getElementById('hourHand').style.transform =
+   'rotate(' + hrDeg + 'deg)';
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+ updateClock();
+ setInterval(updateClock,1000);
+});
+
+})();
+</script>
+
 </body>
 </html>
