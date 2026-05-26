@@ -517,7 +517,7 @@ body.kurban-active #kurbanOverlay{
 .kurban-moon{
   position:absolute;
   top:9vh;
-  right:10vw;
+  right:2vw;
   width:150px;
   height:150px;
   border-radius:50%;
@@ -903,31 +903,17 @@ setInterval(()=>{
 (function(){
 
   // ===== EXAKTE PROGRAMMIMI =====
-  const START_YEAR = 2026;
-  const START_MONTH = 5;   // Mai
-  const START_DAY = 27;
-  const START_HOUR = 5;
-  const START_MINUTE = 55;
+  // 27.05.2026 um 05:55
+  // 30 Minuten sichtbar
+  // danach normale Vaktia weiter
 
-  const DURATION_MINUTES = 30;
+  const startTime = new Date(2026, 4, 27, 5, 55, 0, 0).getTime();
 
-  // ==============================
+  const endTime = startTime + (30 * 60 * 1000);
 
   const overlay = document.getElementById("kurbanOverlay");
   const timer = null;
   const stars = document.getElementById("kurbanStars");
-
-  const startTime = new Date(
-    START_YEAR,
-    START_MONTH - 1,
-    START_DAY,
-    START_HOUR,
-    START_MINUTE,
-    0,
-    0
-  ).getTime();
-
-  const endTime = startTime + (DURATION_MINUTES * 60 * 1000);
 
   let starsCreated = false;
 
