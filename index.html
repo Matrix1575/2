@@ -449,9 +449,188 @@ z-index:999999 !important;
 }
 
 </style>
+
+<style id="kurbanBajramProgramm">
+#kurbanOverlay{
+  position:fixed;
+  inset:0;
+  z-index:999999999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(255,255,255,.36), transparent 22%),
+    radial-gradient(circle at 18% 25%, rgba(94,215,189,.32), transparent 30%),
+    radial-gradient(circle at 82% 70%, rgba(255,220,120,.28), transparent 35%),
+    linear-gradient(180deg,#0a2439 0%,#173f57 45%,#061927 100%);
+  color:#fff;
+}
+
+body.kurban-active .container{
+  opacity:0 !important;
+  pointer-events:none !important;
+}
+
+body.kurban-active #kurbanOverlay{
+  display:flex;
+}
+
+.kurban-stars span{
+  position:absolute;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 18px rgba(255,255,255,.9);
+  animation:kurbanStar 8s linear infinite;
+}
+
+@keyframes kurbanStar{
+  from{transform:translateY(110vh) scale(.5);opacity:0;}
+  15%{opacity:.9;}
+  85%{opacity:.8;}
+  to{transform:translateY(-15vh) scale(1.2);opacity:0;}
+}
+
+.kurban-light{
+  position:absolute;
+  left:50%;
+  top:-20vh;
+  width:90vw;
+  height:90vh;
+  transform:translateX(-50%);
+  background:
+    linear-gradient(100deg,transparent 12%,rgba(255,255,255,.10) 18%,transparent 26%),
+    linear-gradient(80deg,transparent 30%,rgba(255,255,255,.13) 38%,transparent 50%),
+    linear-gradient(92deg,transparent 50%,rgba(255,255,255,.12) 58%,transparent 70%);
+  opacity:.8;
+  filter:blur(2px);
+  animation:kurbanRays 6s ease-in-out infinite alternate;
+}
+
+@keyframes kurbanRays{
+  from{opacity:.45;transform:translateX(-52%) skewX(-3deg);}
+  to{opacity:.95;transform:translateX(-48%) skewX(3deg);}
+}
+
+.kurban-moon{
+  position:absolute;
+  top:9vh;
+  right:10vw;
+  width:150px;
+  height:150px;
+  border-radius:50%;
+  box-shadow:-34px 0 0 0 rgba(255,255,255,.96);
+  filter:drop-shadow(0 0 28px rgba(255,255,255,.75));
+  animation:kurbanMoon 5s ease-in-out infinite;
+}
+
+@keyframes kurbanMoon{
+  0%,100%{transform:translateY(0) rotate(-8deg);}
+  50%{transform:translateY(-18px) rotate(4deg);}
+}
+
+.kurban-card{
+  position:relative;
+  width:min(88vw,1280px);
+  min-height:58vh;
+  border-radius:38px;
+  border:2px solid rgba(255,255,255,.28);
+  background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.055));
+  box-shadow:
+    0 0 70px rgba(94,215,189,.38),
+    inset 0 0 60px rgba(255,255,255,.10),
+    0 30px 80px rgba(0,0,0,.45);
+  backdrop-filter:blur(12px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:55px;
+  overflow:hidden;
+}
+
+.kurban-card:before{
+  content:"";
+  position:absolute;
+  inset:-30%;
+  background:conic-gradient(from 90deg,transparent,rgba(255,255,255,.14),transparent,rgba(94,215,189,.20),transparent,rgba(255,220,120,.18),transparent);
+  animation:kurbanRotate 16s linear infinite;
+  z-index:-1;
+}
+
+@keyframes kurbanRotate{
+  to{transform:rotate(360deg);}
+}
+
+.kurban-small{
+  font-size:clamp(24px,2.4vw,46px);
+  color:#5ed7bd;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  margin-bottom:28px;
+  text-shadow:0 0 22px rgba(94,215,189,.55);
+}
+
+.kurban-title{
+  font-size:clamp(70px,9vw,168px);
+  line-height:.92;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:-.055em;
+  background:linear-gradient(90deg,#fff,#dffff7,#f7d36a,#fff);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  filter:drop-shadow(0 0 28px rgba(255,255,255,.22));
+  animation:kurbanGlow 3.4s ease-in-out infinite alternate;
+}
+
+.kurban-sub{
+  margin-top:34px;
+  font-size:clamp(25px,2.7vw,52px);
+  color:rgba(255,255,255,.88);
+}
+
+.kurban-timer{
+  margin-top:42px;
+  min-width:320px;
+  padding:16px 30px;
+  border-radius:16px;
+  border:2px solid #49fff0;
+  background:rgba(8,32,50,.92);
+  color:#fff;
+  font-size:clamp(32px,3vw,62px);
+  font-weight:900;
+  letter-spacing:4px;
+  box-shadow:0 0 25px rgba(73,255,240,.72);
+}
+
+@keyframes kurbanGlow{
+  from{filter:drop-shadow(0 0 18px rgba(255,255,255,.18));}
+  to{filter:drop-shadow(0 0 42px rgba(247,211,106,.45));}
+}
+</style>
+
 </head>
 
 <body>
+
+<div id="kurbanOverlay">
+  <div class="kurban-light"></div>
+  <div class="kurban-stars" id="kurbanStars"></div>
+  <div class="kurban-moon"></div>
+
+  <div class="kurban-card">
+    <div class="kurban-small">Xhamia e fshatit Topanicë 1</div>
+    <div class="kurban-title">Urime<br>Kurban Bajrami</div>
+    <div class="kurban-sub">Allahu ju pranoftë ibadetet dhe lutjet</div>
+    
+  </div>
+</div>
+
 
 <div class="container">
 
@@ -717,6 +896,92 @@ setInterval(()=>{
   }
 },1000);
 
+</script>
+
+
+<script>
+(function(){
+
+  // ===== EXAKTE PROGRAMMIMI =====
+  const START_YEAR = 2026;
+  const START_MONTH = 5;   // Mai
+  const START_DAY = 27;
+  const START_HOUR = 5;
+  const START_MINUTE = 55;
+
+  const DURATION_MINUTES = 30;
+
+  // ==============================
+
+  const overlay = document.getElementById("kurbanOverlay");
+  const timer = null;
+  const stars = document.getElementById("kurbanStars");
+
+  const startTime = new Date(
+    START_YEAR,
+    START_MONTH - 1,
+    START_DAY,
+    START_HOUR,
+    START_MINUTE,
+    0,
+    0
+  ).getTime();
+
+  const endTime = startTime + (DURATION_MINUTES * 60 * 1000);
+
+  let starsCreated = false;
+
+  function createStars(){
+    if(starsCreated) return;
+    starsCreated = true;
+
+    for(let i=0;i<70;i++){
+      const s=document.createElement("span");
+      s.style.left=(Math.random()*100)+"vw";
+      s.style.animationDuration=(5+Math.random()*9)+"s";
+      s.style.animationDelay=(-Math.random()*12)+"s";
+      s.style.opacity=(0.25+Math.random()*0.75).toFixed(2);
+      s.style.transform="scale("+(0.5+Math.random()*1.25)+")";
+      stars.appendChild(s);
+    }
+  }
+
+  function formatTime(ms){
+    const total = Math.max(0, Math.ceil(ms / 1000));
+    const min = Math.floor(total / 60);
+    const sec = total % 60;
+
+    return String(min).padStart(2,"0") + ":" +
+           String(sec).padStart(2,"0");
+  }
+
+  function updateProgramm(){
+    const now = Date.now();
+
+    if(now >= startTime && now < endTime){
+
+      createStars();
+
+      document.body.classList.add("kurban-active");
+
+      const left = endTime - now;
+
+      if(timer){
+        timer.textContent = formatTime(left);
+      }
+
+    } else {
+
+      document.body.classList.remove("kurban-active");
+
+    }
+
+    requestAnimationFrame(updateProgramm);
+  }
+
+  updateProgramm();
+
+})();
 </script>
 
 </body>
