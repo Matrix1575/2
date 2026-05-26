@@ -683,8 +683,8 @@ function fixedDrekaTimeForKey(key){
 function makePrayersForKey(key){
   const t=safeDayData(key);
   return [
-    // Sabahu si te template: ora e mesme = Lindja - 40 min; poshte mbetet Lindja e diellit nga PDF.
-    {name:"Sabahu",time:timeMinusMinutes(t.lindja,40),sub:[t.imsaku,t.lindja]},
+    // Sabahu si te template: ora e mesme = Lindja - 37 min; poshte mbetet Lindja e diellit nga PDF.
+    {name:"Sabahu",time:timeMinusMinutes(t.lindja,37),sub:[t.imsaku,t.lindja]},
     // Dreka: ora e mesme fikse nderrohet automatikisht sipas ores verore/dimerore.
     // Ora e PDF-se qendron poshte pa u ndryshuar.
     {name:"Dreka",time:fixedDrekaTimeForKey(key),sub:[t.dreka]},
