@@ -770,20 +770,24 @@ function getNextPrayerInfo(){
   const now=kosovoNow();
   const todayKey=dateKeyFromDate(now);
   const tomorrowKey=dateKeyFromDate(addDays(now,1));
-  const names=["Sabahu","Dreka","Ikindia","Akshami","Jacia"];
-  const keys=["sabahu","dreka","ikindia","akshami","jacia"];
-  const today=safeDayData(todayKey);
-  for(let i=0;i<keys.length;i++){
-    const [h,m]=today[keys[i]].split(":").map(Number);
+
+  // WICHTIG:
+  // Countdown und aktive Kolone laufen jetzt nach den ANGEZEIGTEN Zeiten,
+  // also auch Sabahu = Lindja - 37 Minuten und Dreka = fixe Sommer-/Winterzeit.
+  const todayPrayers = makePrayersForKey(todayKey);
+
+  for(let i=0;i<todayPrayers.length;i++){
+    const [h,m]=todayPrayers[i].time.split(":").map(Number);
     const target=new Date(now);
     target.setHours(h,m,0,0);
-    if(now < target) return {index:i,target:target,name:names[i]};
+    if(now < target) return {index:i,target:target,name:todayPrayers[i].name};
   }
-  const tomorrow=safeDayData(tomorrowKey);
-  const [h,m]=tomorrow.sabahu.split(":").map(Number);
+
+  const tomorrowPrayers = makePrayersForKey(tomorrowKey);
+  const [h,m]=tomorrowPrayers[0].time.split(":").map(Number);
   const target=addDays(now,1);
   target.setHours(h,m,0,0);
-  return {index:0,target:target,name:"Sabahu"};
+  return {index:0,target:target,name:tomorrowPrayers[0].name};
 }
 
 function getActiveIndex(){
@@ -886,6 +890,24 @@ updateDigitalClock();
 setInterval(updateAll,1000);
 setInterval(updateDigitalClock,1000);
 setInterval(fixIconsForTV,60000);
+
+// Exakter Tageswechsel: Punkt 00:00 Uhr Kosovo/Europe-Belgrade
+// werden Kalender, Hijri-Datum und alle angezeigten Gebetszeiten neu geladen.
+function scheduleExactMidnightRefresh(){
+  const now=kosovoNow();
+  const next=new Date(now);
+  next.setDate(next.getDate()+1);
+  next.setHours(0,0,0,0);
+  const delay=Math.max(1000,next-now);
+
+  setTimeout(()=>{
+    refreshPrayersIfNeeded(true);
+    updateAll();
+    updateDigitalClock();
+    scheduleExactMidnightRefresh();
+  }, delay);
+}
+scheduleExactMidnightRefresh();
 
 
 
